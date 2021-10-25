@@ -1,9 +1,16 @@
-import { FormControl, InputLabel, NativeSelect } from '@material-ui/core';
+import { FormControl, FormHelperText, InputLabel, makeStyles, NativeSelect } from '@material-ui/core';
 import React from 'react';
 
-function CountrySelector(props) {
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: `${theme.spacing(3)}px 0`
+    }
+}))
+
+function CountrySelector({ value, handleOnChangeSelector, countries }) {
+    const style = useStyles()
     return (
-        <FormControl>
+        <FormControl className={style.formControl}>
             <InputLabel
                 htmlFor=""
                 shrink
@@ -12,12 +19,24 @@ function CountrySelector(props) {
             </InputLabel>
             <NativeSelect
                 value={value}
-                onchange={() => handleOnChange}
-                input={{
+                onChange={(e) => handleOnChangeSelector(e)}
+                inputProps={{
                     name: 'Country',
                     id: 'Country-selector'
                 }}
-            ></NativeSelect>
+            >
+                {countries && countries.length > 0 &&
+                    countries.map((country) => {
+                        return (
+                            <option
+                                key={country.ISO2}
+                                value={country.ISO2.toLowerCase()}>
+                                {country.Country}
+                            </option>
+                        )
+                    })}
+            </NativeSelect>
+            <FormHelperText>Lựa chọn quốc gia</FormHelperText>
         </FormControl>
     );
 }
